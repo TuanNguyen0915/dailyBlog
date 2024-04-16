@@ -1,0 +1,34 @@
+"use client"
+import CustomButton from "@/components/shared/button/CustomButton"
+import HorizontalDivider from "@/components/shared/divider/HorizontalDivider"
+import VerticalDivider from "@/components/shared/divider/VerticalDivider"
+import SignInForm from "@/components/shared/form/SignInForm"
+import SignUpForm from "@/components/shared/form/SignUpForm"
+import { motion } from "framer-motion"
+
+const SingUpPage = () => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -200 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 200 }}
+      transition={{ duration: 0.75 }}
+      className="flexCol w-full gap-4 2xl:w-2/3"
+    >
+      <h1 className="auth-h1 mb-6">Sign Up</h1>
+      <div className="flexCenter w-full gap-10 max-lg:flex-col lg:px-6">
+        <div className="flexCenter w-full flex-col gap-4 px-2 md:w-3/4 lg:w-1/2">
+          <CustomButton title="Continue with Google" type="google" />
+          <CustomButton title="Continue with Github" />
+        </div>
+        <VerticalDivider />
+        <HorizontalDivider />
+        <div className="flexCenter w-full px-2 md:w-3/4 lg:w-1/2">
+          <SignUpForm />
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
+export default SingUpPage
