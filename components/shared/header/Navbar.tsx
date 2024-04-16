@@ -3,7 +3,6 @@ import Link from "next/link"
 import ThemeToggle from "../ThemeToggle"
 import SignInButton from "../button/SignInButton"
 
-import SignOutButton from "../button/SignOutButton"
 import { useUserStore } from "@/lib/stores/user.store"
 import UserButton from "../button/UserButton"
 
@@ -16,10 +15,13 @@ const Navbar = () => {
       </Link>
       <div className="flexBetween gap-4">
         <ThemeToggle />
-        {currentUser ? <div className="flexCenter gap-4">
-          <UserButton />
-          <SignOutButton />
-        </div> : <SignInButton />}
+        {currentUser ? (
+          <div className="flexCenter gap-4">
+            <UserButton />
+          </div>
+        ) : (
+          <SignInButton />
+        )}
       </div>
     </header>
   )
