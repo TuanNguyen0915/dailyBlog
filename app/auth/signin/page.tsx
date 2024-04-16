@@ -12,7 +12,7 @@ const SignInPage = () => {
       whileInView={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -200 }}
       transition={{ duration: 0.75 }}
-      className="flexCol w-full gap-4"
+      className="flexCol w-full gap-4 2xl:w-2/3"
     >
       <h1 className="auth-h1 mb-6">Sign In</h1>
       <div className="flexCenter w-full gap-10 max-lg:flex-col lg:px-6">

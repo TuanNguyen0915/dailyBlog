@@ -4,19 +4,28 @@ import { Button } from "@/components/ui/button"
 import { Lock, Mail } from "lucide-react"
 import Link from "next/link"
 import { useForm, SubmitHandler } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { z } from "zod"
+import { useState } from "react"
+import { RiEye2Fill, RiEyeCloseFill } from "react-icons/ri"
 
-type IInput = {
-  email: string
-  password: string
-}
+const formSchema = z.object({
+  email: z.string().email("Invalid email"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+})
+
+type SignInSchemaType = z.infer<typeof formSchema>
 const SignInForm = () => {
+  const [showPassword, setShowPassword] = useState(false)
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors, isSubmitting },
-  } = useForm<IInput>()
-  const onSubmit: SubmitHandler<IInput> = (data) => {
+  } = useForm<SignInSchemaType>({
+    resolver: zodResolver(formSchema),
+  })
+  const onSubmit: SubmitHandler<SignInSchemaType> = (data) => {
     console.log(data)
   }
 
@@ -29,24 +38,45 @@ const SignInForm = () => {
         />
         <input
           className="max-lg:text-md w-full rounded-xl bg-transparent px-2 py-1 opacity-80 focus:outline-none group-hover:opacity-100"
-          type="email"
           placeholder="Email"
-          {...(register("email"), { required: true })}
+          {...register("email")}
         />
       </div>
+      {errors.email && (
+        <p className="text-md italic text-red-500">{errors.email.message}</p>
+      )}
       <div className="group flex w-full items-center gap-4 rounded-full border border-muted-foreground px-4 py-2 md:py-1">
         <Lock
           size={40}
           className="opacity-60 transition-all group-hover:opacity-100"
         />
         <input
+          type={showPassword ? "text" : "password"}
           className="max-lg:text-md w-full rounded-xl bg-transparent px-2 py-1 opacity-80 focus:outline-none group-hover:opacity-100"
-          type="password"
           placeholder="password"
-          {...(register("password"), { required: true })}
+          {...register("password")}
         />
+        {showPassword ? (
+          <RiEye2Fill
+            size={24}
+            className="cursor-pointer"
+            onClick={() => {
+              setShowPassword(!showPassword)
+            }}
+          />
+        ) : (
+          <RiEyeCloseFill
+            size={24}
+            className="cursor-pointer"
+            onClick={() => {
+              setShowPassword(!showPassword)
+            }}
+          />
+        )}
       </div>
-
+      {errors.password && (
+        <p className="text-md italic text-red-500">{errors.password.message}</p>
+      )}
       <div className="flexBetween w-full gap-6">
         <Link
           href={"/auth/signup"}
