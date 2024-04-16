@@ -2,6 +2,8 @@ import type { Metadata } from "next"
 import { Inter, Poppins } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/shared/provider/ThemeProvider"
+import AuthProvider from "@/components/shared/provider/AuthProvider"
+import { Toaster } from "react-hot-toast"
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -24,13 +26,16 @@ export default function RootLayout({
         suppressHydrationWarning
         className={`${poppins.className} mx-auto min-h-screen max-w-[1920px]`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+        <AuthProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+          <Toaster />
+        </AuthProvider>
       </body>
     </html>
   )

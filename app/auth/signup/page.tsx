@@ -2,11 +2,17 @@
 import CustomButton from "@/components/shared/button/CustomButton"
 import HorizontalDivider from "@/components/shared/divider/HorizontalDivider"
 import VerticalDivider from "@/components/shared/divider/VerticalDivider"
-import SignInForm from "@/components/shared/form/SignInForm"
 import SignUpForm from "@/components/shared/form/SignUpForm"
 import { motion } from "framer-motion"
+import { signIn, useSession } from "next-auth/react"
+import { redirect } from "next/navigation"
 
 const SingUpPage = () => {
+  const { status } = useSession()
+  if (status === "authenticated") {
+    return redirect("/")
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: -200 }}
@@ -18,8 +24,15 @@ const SingUpPage = () => {
       <h1 className="auth-h1 mb-6">Sign Up</h1>
       <div className="flexCenter w-full gap-10 max-lg:flex-col lg:px-6">
         <div className="flexCenter w-full flex-col gap-4 px-2 md:w-3/4 lg:w-1/2">
-          <CustomButton title="Continue with Google" type="google" />
-          <CustomButton title="Continue with Github" />
+          <CustomButton
+            title="Continue with Google"
+            type="google"
+            handleClick={() => signIn("google", { callbackUrl: "/" })}
+          />
+          <CustomButton
+            title="Continue with Github"
+            handleClick={() => signIn("github", { callbackUrl: "/" })}
+          />
         </div>
         <VerticalDivider />
         <HorizontalDivider />

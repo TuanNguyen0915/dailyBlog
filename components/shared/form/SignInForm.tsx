@@ -8,7 +8,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { useState } from "react"
 import { RiEye2Fill, RiEyeCloseFill } from "react-icons/ri"
-
+import { signIn } from "next-auth/react"
+import toast from "react-hot-toast"
 const formSchema = z.object({
   email: z.string().email("Invalid email"),
   password: z.string().min(6, "Password must be at least 6 characters"),
@@ -25,8 +26,20 @@ const SignInForm = () => {
   } = useForm<SignInSchemaType>({
     resolver: zodResolver(formSchema),
   })
-  const onSubmit: SubmitHandler<SignInSchemaType> = (data) => {
-    console.log(data)
+  const onSubmit: SubmitHandler<SignInSchemaType> = async (data) => {
+    const res = await signIn("credentials", {
+      email: data.email,
+      password: data.password,
+      redirect: false,
+    })
+    if (res?.error) {
+      toast.error(res.error, {
+        style: {
+          color: "white",
+          background: "red",
+        },
+      })
+    }
   }
 
   return (

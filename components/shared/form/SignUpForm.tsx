@@ -8,6 +8,9 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { useState } from "react"
 import { RiEye2Fill, RiEyeCloseFill } from "react-icons/ri"
+import { createNewUser } from "@/lib/actions/user.action"
+import toast from "react-hot-toast"
+import { useRouter } from "next/navigation"
 
 const formSchema = z
   .object({
@@ -22,6 +25,7 @@ const formSchema = z
 
 type SignInSchemaType = z.infer<typeof formSchema>
 const SignUpForm = () => {
+  const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
   const {
     register,
@@ -31,8 +35,19 @@ const SignUpForm = () => {
   } = useForm<SignInSchemaType>({
     resolver: zodResolver(formSchema),
   })
-  const onSubmit: SubmitHandler<SignInSchemaType> = (data) => {
-    console.log(data)
+  const onSubmit: SubmitHandler<SignInSchemaType> = async (data) => {
+    const user = await createNewUser(data)
+    if (user.error) {
+      toast.error(user.error, {
+        style: { borderRadius: "10px", background: "red", color: "#fff" },
+      }
+    )
+    } else {
+      toast.success("Account created successfully", {
+        style: { borderRadius: "10px", background: "green", color: "#fff" },
+      })
+      router.push("/auth/signin")
+    }
   }
 
   return (
