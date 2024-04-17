@@ -10,6 +10,9 @@ import { Button } from "@/components/ui/button"
 import MarkdownPreview from "../MarkdownPreview"
 import toast from "react-hot-toast"
 import { useUserStore } from "@/lib/stores/user.store"
+import { useRouter } from "next/navigation"
+import { createNewBlog, updateBlog } from "@/lib/actions/blog.action"
+import { Blog } from "@prisma/client"
 
 const formSchema = z.object({
   title: z.string().min(5, "Title must be at least 5 characters"),
@@ -21,8 +24,9 @@ const formSchema = z.object({
 
 type FormSchemaType = z.infer<typeof formSchema>
 
-const CreateBlogForm = () => {
-  const { currentUser } = useUserStore()
+const CreateBlogForm = ({ blog, action }: { blog?: Blog; action?: string }) => {
+  const router = useRouter()
+  const { currentUser, setCurrentUser } = useUserStore()
   const [isPreview, setPreview] = useState(false)
   const {
     register,
@@ -34,20 +38,34 @@ const CreateBlogForm = () => {
     mode: "all",
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      content: "",
-      imageCover: "",
-      published: true,
-      authorId: "",
+      title: blog?.title || "",
+      content: blog?.content || "",
+      imageCover: blog?.imageCover || "",
+      published: blog?.published || true,
+      authorId: blog?.authorId || "",
     },
   })
 
   const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
-    if (!data.imageCover.includes("images.unsplash.com")) {
-      return toast.error("Invalid image url")
+    if (action === "edit") {
+      const updatedBlog = await updateBlog(blog?.id!, data)
+      if(updatedBlog.status === 201) {
+        toast.success("Blog updated successfully")
+        return router.push("/dashboard")
+      }
     } else {
-      data.authorId = currentUser?.id!
-      console.log(data)
+      if (!data.imageCover.includes("images.unsplash.com")) {
+        return toast.error("Invalid image url")
+      } else {
+        data.authorId = currentUser?.id!
+        const updatedUser = await createNewBlog(data)
+        if (updatedUser.error) {
+          toast.error(updatedUser.error)
+        } else {
+          setCurrentUser(updatedUser.user)
+          return router.push("/dashboard")
+        }
+      }
     }
   }
   return (
@@ -100,7 +118,7 @@ const CreateBlogForm = () => {
             {...register("content")}
             className="w-full rounded-md px-4 py-2 focus:outline-primary"
             placeholder="Content"
-            rows={10}
+            rows={20}
           />
           {errors.content && (
             <p className="text-sm text-red-500">{errors.content.message}</p>
@@ -109,11 +127,11 @@ const CreateBlogForm = () => {
             disabled={isSubmitting}
             className="disabled:op-50 disabled:cursor-not-allowed"
           >
-            Create
+            {action === "edit" ? "Update" : "Create"}
           </Button>
         </div>
 
-        <div className={`${!isPreview && "max-lg:hidden"} w-full space-y-4`}>
+        <div className={`${!isPreview && "max-xl:hidden"} w-full space-y-4`}>
           <h1 className="text-2xl font-semibold text-primary">
             {watch("title")}
           </h1>
@@ -134,7 +152,7 @@ const CreateBlogForm = () => {
           ) : (
             <></>
           )}
-          <MarkdownPreview content={watch("content")} />
+          <MarkdownPreview content={watch("content")} isPreview={isPreview} />
         </div>
       </div>
     </form>

@@ -5,8 +5,9 @@ import { useRouter } from "next/navigation"
 import { RiAddFill } from "react-icons/ri"
 
 const DashBoardPage = () => {
-  const router = useRouter()
   const { currentUser } = useUserStore()
+  const router = useRouter()
+
   if (!currentUser) {
     return router.push("/")
   } else {
@@ -16,15 +17,19 @@ const DashBoardPage = () => {
           <h1 className="text-3xl font-bold">
             Welcome, {currentUser.username}
           </h1>
-          <Button
-            variant={"outline"}
-            className="flexCenter gap-2 hover:border-primary"
-            onClick={() => router.push("/dashboard/create")}
-          >
-            <RiAddFill size={20} />
-            Create
-          </Button>
+
+          {currentUser.isAdmin && (
+            <Button
+              variant={"outline"}
+              className="flexCenter gap-2 hover:border-primary"
+              onClick={() => router.push("/dashboard/create")}
+            >
+              <RiAddFill size={20} />
+              Create
+            </Button>
+          )}
         </div>
+        <p>{currentUser.blogsIds.length} blogs</p>
       </div>
     )
   }
