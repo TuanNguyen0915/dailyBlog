@@ -14,14 +14,16 @@ datasource db {
 }
 
 model Post {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  title     String
-  content   String
-  authorId  String   @db.ObjectId
-  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  likes     String[] @db.ObjectId
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  title      String
+  content    String
+  imageCover String?
+  published  Boolean  @default(true)
+  authorId   String   @db.ObjectId
+  author     User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  likes      String[] @db.ObjectId
 }
 
 model User {
@@ -31,6 +33,7 @@ model User {
   avatar       String?
   username     String?
   posts        Post[]
+  isAdmin      Boolean  @default(false)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }

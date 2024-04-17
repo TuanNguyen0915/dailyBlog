@@ -5,14 +5,13 @@ import SignInButton from "../button/SignInButton"
 
 import { useUserStore } from "@/lib/stores/user.store"
 import UserButton from "../button/UserButton"
+import Logo from "./Logo"
 
 const Navbar = () => {
   const { currentUser } = useUserStore()
   return (
     <header className="flexBetween rounded-lg border-b-2 border-primary px-2 py-4 shadow-lg">
-      <Link href={"/"} className="text-3xl font-extrabold">
-        Daily Blog
-      </Link>
+      <Logo />
       <div className="flexBetween gap-4">
         <ThemeToggle />
         {currentUser ? (

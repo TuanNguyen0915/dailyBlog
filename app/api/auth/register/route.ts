@@ -6,7 +6,7 @@ export const POST = async (req: Request) => {
     const formData = await req.json()
     let user = await prisma.user.findUnique({
       where: {
-        email: formData.email,
+        email: formData.email.toLowerCase(),
       },
     })
     if (user) {
@@ -14,7 +14,7 @@ export const POST = async (req: Request) => {
     } else {
       user = await prisma.user.create({
         data: {
-          email: formData.email,
+          email: formData.email.toLowerCase(),
           username: formData.email.split("@")[0],
           hashPassword: bcrypt.hashSync(formData.password, 10),
         },

@@ -28,7 +28,7 @@ const SignInForm = () => {
   })
   const onSubmit: SubmitHandler<SignInSchemaType> = async (data) => {
     const res = await signIn("credentials", {
-      email: data.email,
+      email: data.email.toLowerCase(),
       password: data.password,
       redirect: false,
     })
