@@ -31,4 +31,5 @@ model User {
   updatedAt    DateTime @updatedAt
   blogsIds     String[] @db.ObjectId
   Blog         Blog[]
+  
 }
