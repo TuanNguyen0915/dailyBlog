@@ -7,6 +7,9 @@ export const getCurrentUser = async (userEmail: string) => {
     where: {
       email: userEmail,
     },
+    include: {
+      blogs: true,
+    },
   })
   return user
 }

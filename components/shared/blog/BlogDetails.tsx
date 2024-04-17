@@ -16,7 +16,7 @@ const BlogDetails = ({ blog }: IProps) => {
   const updated = new Date(blog.updatedAt).toDateString()
   return (
     <div className="mt-10 w-full space-y-4 p-2">
-      <h1 className="text-4xl font-extrabold tracking-wider">{blog.title}</h1>
+      <h1 className="text-4xl font-extrabold tracking-wider capitalize">{blog.title}</h1>
 
       <div className="flexBetween gap-2">
         <div className="flex items-center gap-2">

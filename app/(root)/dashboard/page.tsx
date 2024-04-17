@@ -1,13 +1,15 @@
 "use client"
+import BlogsTable from "@/components/shared/blog/BlogsTable"
 import { Button } from "@/components/ui/button"
 import { useUserStore } from "@/lib/stores/user.store"
+import { Blog, User } from "@prisma/client"
 import { useRouter } from "next/navigation"
 import { RiAddFill } from "react-icons/ri"
+
 
 const DashBoardPage = () => {
   const { currentUser } = useUserStore()
   const router = useRouter()
-
   if (!currentUser) {
     return router.push("/")
   } else {
@@ -29,7 +31,7 @@ const DashBoardPage = () => {
             </Button>
           )}
         </div>
-        <p>{currentUser.blogsIds.length} blogs</p>
+        <BlogsTable blogs={currentUser.blogs} />
       </div>
     )
   }

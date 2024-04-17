@@ -30,7 +30,7 @@ const BlogCard = ({ blog }: { blog: Blog }) => {
         <p className="text-sm italic text-muted-foreground">
           Latest update: {lastUpdated}
         </p>
-        <p className="text-2xl font-semibold">{blog.title}</p>
+        <p className="text-2xl font-semibold capitalize">{blog.title}</p>
       </div>
     </div>
   )
