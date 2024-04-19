@@ -30,6 +30,5 @@ model User {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   blogsIds     String[] @db.ObjectId
-  blogs         Blog[]
-  
+  blogs        Blog[] 
 }

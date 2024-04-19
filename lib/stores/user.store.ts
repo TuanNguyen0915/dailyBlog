@@ -1,12 +1,13 @@
-import { Blog, User } from "@prisma/client"
+
 import { create } from "zustand"
+import { SafeUser } from "../types"
 
 interface IUserStore {
-  currentUser: User & {blogs: Blog[]} | null
-  setCurrentUser: (currentUser: User & {blogs: Blog[]}) => void
+  currentUser: SafeUser | null
+  setCurrentUser: (currentUser: SafeUser) => void
 }
 
 export const useUserStore = create<IUserStore>((set) => ({
   currentUser: null,
-  setCurrentUser: (currentUser: User & {blogs: Blog[]}) => set({ currentUser }),
+  setCurrentUser: (currentUser: SafeUser) => set({ currentUser }),
 }))

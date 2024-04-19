@@ -3,8 +3,8 @@ import { useUserStore } from "@/lib/stores/user.store"
 import { useRouter } from "next/navigation"
 
 const CheckAdmin = ({ children }: { children: React.ReactNode }) => {
-  const router = useRouter()
   const { currentUser } = useUserStore()
+  const router = useRouter()
   if (!currentUser?.isAdmin) {
     router.push("/")
     return <></>

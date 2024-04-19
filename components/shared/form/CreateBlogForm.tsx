@@ -49,9 +49,12 @@ const CreateBlogForm = ({ blog, action }: { blog?: Blog; action?: string }) => {
   const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
     if (action === "edit") {
       const updatedBlog = await updateBlog(blog?.id!, data)
-      if(updatedBlog.status === 201) {
+      if (!updatedBlog) {
+        toast.error("Something went wrong")
+      } else {
         toast.success("Blog updated successfully")
-        return router.push("/dashboard")
+        // router.push(`/blog/${blog?.id}`)
+        router.push("/dashboard")
       }
     } else {
       if (!data.imageCover.includes("images.unsplash.com")) {
@@ -59,11 +62,12 @@ const CreateBlogForm = ({ blog, action }: { blog?: Blog; action?: string }) => {
       } else {
         data.authorId = currentUser?.id!
         const updatedUser = await createNewBlog(data)
-        if (updatedUser.error) {
-          toast.error(updatedUser.error)
+        if (!updatedUser) {
+          toast.error("Something went wrong")
         } else {
-          setCurrentUser(updatedUser.user)
-          return router.push("/dashboard")
+          toast.success("Blog created successfully")
+          setCurrentUser(updatedUser)
+          router.push("/dashboard")
         }
       }
     }

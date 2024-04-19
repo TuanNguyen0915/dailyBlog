@@ -4,9 +4,10 @@ import { Blog } from "@prisma/client"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 
-import React from "react"
+import React, { useState } from "react"
 
 const BlogCard = ({ blog }: { blog: Blog }) => {
+  const [imageLoading, setImageLoading] = useState(true)
   const router = useRouter()
   const lastUpdated = new Date(blog.updatedAt).toDateString()
   return (
@@ -21,8 +22,8 @@ const BlogCard = ({ blog }: { blog: Blog }) => {
           src={blog.imageCover!}
           alt={blog.title}
           fill
-          className="rounded-lg opacity-0 transition-all duration-500 group-hover:scale-110"
-          onLoadingComplete={(image) => image.classList.remove("opacity-0")}
+          className={`${imageLoading ? "blur" : ""} rounded-lg transition-all duration-500 group-hover:scale-110`}
+          onLoad={() => setImageLoading(false)}
         />
       </div>
 

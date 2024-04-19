@@ -1,19 +1,77 @@
+"use server"
 import prisma from "@/prisma/prismaDb"
-import axios from "axios"
-import exp from "constants"
-
+import { revalidatePath } from "next/cache"
+const DASHBOARD = "/dashboard"
 export const createNewBlog = async (formData: any) => {
-  const { data } = await axios.post("/api/blog", formData)
-  return data
+  const blog = await prisma.blog.create({
+    data: {
+      title: formData.title,
+      content: formData.content,
+      imageCover: formData.imageCover,
+      published: formData.published,
+      authorId: formData.authorId,
+    },
+  })
+  const user = await prisma.user.update({
+    where: {
+      id: blog.authorId,
+    },
+    data: {
+      blogsIds: {
+        push: blog.id,
+      },
+    },
+  })
+  revalidatePath(DASHBOARD)
+  return user
 }
 
 export const updateBlog = async (blogId: string, formData: any) => {
-  const data = await axios.put(`/api/blog/edit/${blogId}`, formData)
-  return data
+  const updateBlog = await prisma.blog.update({
+    where: {
+      id: blogId,
+    },
+    data: {
+      title: formData.title,
+      content: formData.content,
+      imageCover: formData.imageCover,
+      published: formData.published,
+    },
+  })
+  revalidatePath(DASHBOARD)
+  return updateBlog
+}
+
+export const deleteBlog = async (blogId: string) => {
+  const blog = await prisma.blog.delete({
+    where: {
+      id: blogId,
+    },
+  })
+  const user = await prisma.user.findUnique({
+    where: {
+      id: blog.authorId,
+    },
+  })
+  const updatedUser = await prisma.user.update({
+    where: {
+      id: blog.authorId,
+    },
+    data: {
+      blogsIds: {
+        set: user?.blogsIds.filter((id) => id !== blogId),
+      },
+    },
+  })
+  revalidatePath(DASHBOARD)
+  return updatedUser
 }
 
 export const getAllBlogs = async () => {
   const blogs = await prisma.blog.findMany({
+    where: {
+      published: true,
+    },
     include: {
       author: true,
     },
@@ -21,6 +79,20 @@ export const getAllBlogs = async () => {
       createdAt: "desc",
     },
   })
+
+  return blogs
+}
+
+export const getBlogsByAuthor = async (authorId: string) => {
+  const blogs = await prisma.blog.findMany({
+    where: {
+      authorId: authorId,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  })
+  if (!blogs) return null
   return blogs
 }
 

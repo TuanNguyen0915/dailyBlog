@@ -6,17 +6,21 @@ import { useUserStore } from "@/lib/stores/user.store"
 import UnlockContent from "../UnlockContent"
 import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
+import { useState } from "react"
 
 interface IProps {
   blog: Blog & { author: User }
 }
 const BlogDetails = ({ blog }: IProps) => {
+  const [imageLoading, setImageLoading] = useState(true)
   const { currentUser } = useUserStore()
   const router = useRouter()
   const updated = new Date(blog.updatedAt).toDateString()
   return (
     <div className="mt-10 w-full space-y-4 p-2">
-      <h1 className="text-4xl font-extrabold tracking-wider capitalize">{blog.title}</h1>
+      <h1 className="text-4xl font-extrabold capitalize tracking-wider">
+        {blog.title}
+      </h1>
 
       <div className="flexBetween gap-2">
         <div className="flex items-center gap-2">
@@ -56,8 +60,8 @@ const BlogDetails = ({ blog }: IProps) => {
             src={blog.imageCover!}
             fill
             alt={blog.title}
-            className="rounded-lg object-cover opacity-0 transition-all duration-500"
-            onLoadingComplete={(image) => image.classList.remove("opacity-0")}
+            className={`rounded-lg object-cover transition-all duration-500 ${imageLoading ? "blur" : ""}`}
+            onLoad={() => setImageLoading(false)}
           />
         </div>
       </div>

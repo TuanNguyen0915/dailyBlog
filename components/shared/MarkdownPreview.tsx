@@ -1,9 +1,11 @@
+"use client"
 import MarkDown from "react-markdown"
 import rehypeHighlight from "rehype-highlight"
 import "highlight.js/styles/atom-one-dark.css"
 import { Terminal } from "lucide-react"
 import CopyButton from "./button/CopyButton"
 import Image from "next/image"
+import { useState } from "react"
 const MarkdownPreview = ({
   content,
   isPreview,
@@ -11,6 +13,8 @@ const MarkdownPreview = ({
   content: string
   isPreview?: boolean
 }) => {
+  const [imageLoading, setImageLoading] = useState(true)
+
   return (
     <MarkDown
       rehypePlugins={[rehypeHighlight]}
@@ -40,7 +44,8 @@ const MarkdownPreview = ({
                 alt="image"
                 width={400}
                 height={400}
-                className="rounded-lg"
+                className={`rounded-lg ${imageLoading ? "blur" : ""} transition-all duration-500`}
+                onLoad={()=> setImageLoading(false)}
               />
             </div>
           )
@@ -49,7 +54,7 @@ const MarkdownPreview = ({
           const id = crypto.randomUUID()
           return (
             <div
-              className={`${isPreview ? "w-full" : "w-1/2"} max-lg:text-md max-md:text-sm w-full space-y-2 max-h-[40vh] overflow-scroll bg-zinc-800/80`}
+              className={`${isPreview ? "w-full" : "w-1/2"} max-lg:text-md max-h-[40vh] w-full space-y-2 overflow-scroll bg-zinc-800/80 max-md:text-sm`}
             >
               <div className="flexBetween w-full">
                 <Terminal />
