@@ -14,3 +14,12 @@ export const getCurrentUser = async (userEmail: string) => {
   return user
 }
 
+
+export const getAllUser = async () => {
+  const allUsers = await prisma.user.findMany({
+    include: {
+      blogs: true,
+    },
+  })
+  return allUsers
+}

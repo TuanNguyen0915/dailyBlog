@@ -69,6 +69,19 @@ export const deleteBlog = async (blogId: string) => {
 
 export const getAllBlogs = async () => {
   const blogs = await prisma.blog.findMany({
+    include: {
+      author: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  })
+
+  return blogs
+}
+
+export const getAllPublishedPosts = async () => {
+  const blogs = await prisma.blog.findMany({
     where: {
       published: true,
     },
@@ -79,7 +92,18 @@ export const getAllBlogs = async () => {
       createdAt: "desc",
     },
   })
+  return blogs
+}
 
+export const getPendingPosts = async () => {
+  const blogs = await prisma.blog.findMany({
+    where: {
+      published: false,
+    },
+    include: {
+      author: true,
+    },
+  })
   return blogs
 }
 

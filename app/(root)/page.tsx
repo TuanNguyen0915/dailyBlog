@@ -1,11 +1,11 @@
-import PostSkeleton from "@/components/shared/PostSkeleton"
+
 import BlogCard from "@/components/shared/blog/BlogCard"
 
-import { getAllBlogs } from "@/lib/actions/blog.action"
+import {getAllPublishedPosts } from "@/lib/actions/blog.action"
 import { Blog } from "@prisma/client"
 
 const Home = async () => {
-  const blogs = await getAllBlogs()
+  const blogs = await getAllPublishedPosts()
   if (blogs.length === 0) {
     return (
       <div className="mt-10 w-full text-center">

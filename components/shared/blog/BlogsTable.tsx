@@ -9,31 +9,16 @@ import {
 import { motion } from "framer-motion"
 
 import BlogTableRow from "./BlogTableRow"
-import { useEffect, useState, useTransition } from "react"
 import { Blog } from "@prisma/client"
-import Loader from "../Loader"
-import { getBlogsByAuthor } from "@/lib/actions/blog.action"
 
-const BlogsTable = ({ authorId }: { authorId: string }) => {
-  const [blogs, setBlogs] = useState<Blog[] | null>()
-  const [transitioning, setTransition] = useTransition()
-  const fetchNewBlogs = async () => {
-    const blogs = await getBlogsByAuthor(authorId)
-    setBlogs(blogs)
-  }
-  useEffect(()=> {
-    setTransition(async()=> {
-      fetchNewBlogs()
-    })
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-  if (!blogs) {
-    return (
-      <div>
-        <h1 className="text-center text-2xl font-extrabold">No blogs</h1>
-      </div>
-    )
-  }
+
+interface IProps {
+  blogs: Blog[]
+  updatedBlogs: () => void
+}
+
+const BlogsTable = ({blogs, updatedBlogs}: IProps) => {
+  
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -52,7 +37,11 @@ const BlogsTable = ({ authorId }: { authorId: string }) => {
         </TableHeader>
         <TableBody>
           {blogs.map((blog) => (
-            <BlogTableRow key={blog.id} blog={blog} updatedBlogs={fetchNewBlogs}/>
+            <BlogTableRow
+              key={blog.id}
+              blog={blog}
+              updatedBlogs={updatedBlogs}
+            />
           ))}
         </TableBody>
       </Table>

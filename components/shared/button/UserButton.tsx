@@ -1,6 +1,6 @@
 "use client"
 import { useUserStore } from "@/lib/stores/user.store"
-import { LogOutIcon, User2 } from "lucide-react"
+import { LogOutIcon, User2, WalletIcon } from "lucide-react"
 import Image from "next/image"
 import {
   DropdownMenu,
@@ -62,6 +62,23 @@ const UserButton = () => {
             </div>
           )
         })}
+        {currentUser?.isAdmin && (
+          <>
+            <DropdownMenuSeparator />
+            <div className="group w-full space-y-1">
+              <DropdownMenuItem
+                className="text-md flexBetween w-full font-semibold group-hover:text-primary"
+                onClick={() => {
+                  router.push("/admin/pending-list")
+                }}
+              >
+                <WalletIcon />
+                <p>Pending List</p>
+              </DropdownMenuItem>
+              <div className="h-[1px] w-0 bg-primary transition-all duration-500 group-hover:w-full" />
+            </div>
+          </>
+        )}
         <DropdownMenuSeparator />
         <div className="group w-full space-y-1">
           <DropdownMenuItem
