@@ -107,3 +107,16 @@ export const getBlogById = async (blogId: string) => {
   })
   return blog
 }
+
+export const changePublishBlog = async (blogId: string, published: boolean) => {
+  const blog = await prisma.blog.update({
+    where: {
+      id: blogId,
+    },
+    data: {
+      published: published,
+    },
+  })
+  revalidatePath(DASHBOARD)
+  return blog
+}

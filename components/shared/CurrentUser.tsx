@@ -1,8 +1,9 @@
 "use client"
 
-import { getCurrentUser } from "@/lib/services/user.service"
+
+import { getCurrentUser } from "@/lib/actions/user.action"
 import { useUserStore } from "@/lib/stores/user.store"
-import { User } from "@prisma/client"
+
 import { useSession } from "next-auth/react"
 import { useEffect, useState } from "react"
 

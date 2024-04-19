@@ -20,7 +20,7 @@ const Home = async () => {
           key={blog.id}
           className={`${idx === 0 && "col-span-2 xl:col-span-3"} w-full`}
         >
-          <BlogCard blog={blog} />
+          <BlogCard blog={blog} idx={idx} />
         </div>
       ))}
     </div>

@@ -6,7 +6,7 @@ import { Blog } from "@prisma/client"
 import { TableCell, TableRow } from "@/components/ui/table"
 import { useRouter } from "next/navigation"
 import { useUserStore } from "@/lib/stores/user.store"
-import { deleteBlog } from "@/lib/actions/blog.action"
+import { changePublishBlog, deleteBlog } from "@/lib/actions/blog.action"
 import toast from "react-hot-toast"
 
 interface IProps {
@@ -14,7 +14,7 @@ interface IProps {
   updatedBlogs: () => void
 }
 
-const BlogTableRow = ({ blog, updatedBlogs }:IProps) => {
+const BlogTableRow = ({ blog, updatedBlogs }: IProps) => {
   const { setCurrentUser } = useUserStore()
   const router = useRouter()
 
@@ -28,6 +28,17 @@ const BlogTableRow = ({ blog, updatedBlogs }:IProps) => {
       updatedBlogs()
     }
   }
+
+  const handleChangePublished = async () => {
+    const updatedBlog = await changePublishBlog(blog.id, !blog.published)
+    if (!updatedBlog) {
+      toast.error("Failed to change published condition")
+    } else {
+      toast.success("Published condition changed successfully")
+      updatedBlogs()
+    }
+  }
+
   return (
     <TableRow key={blog.id}>
       <TableCell className="space-y-4">
@@ -70,7 +81,10 @@ const BlogTableRow = ({ blog, updatedBlogs }:IProps) => {
         />
       </TableCell>
       <TableCell className="text-end">
-        <Switch checked={blog.published} />
+        <Switch
+          checked={blog.published}
+          onCheckedChange={handleChangePublished}
+        />
       </TableCell>
     </TableRow>
   )

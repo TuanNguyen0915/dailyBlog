@@ -8,9 +8,10 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { useState } from "react"
 import { RiEye2Fill, RiEyeCloseFill } from "react-icons/ri"
-import { createNewUser } from "@/lib/actions/user.action"
+
 import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
+import { createNewUser } from "@/lib/services/user.service"
 
 const formSchema = z
   .object({

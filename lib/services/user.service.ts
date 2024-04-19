@@ -1,15 +1,11 @@
-"use server"
 
-import prisma from "@/prisma/prismaDb"
+import axios from "axios"
+interface IFormData {
+  email: string
+  password: string
+}
 
-export const getCurrentUser = async (userEmail: string) => {
-  const user = await prisma.user.findUnique({
-    where: {
-      email: userEmail,
-    },
-    include: {
-      blogs: true,
-    },
-  })
-  return user
+export const createNewUser = async (formData: IFormData) => {
+  const { data } = await axios.post("/api/auth/register", formData)
+  return data
 }

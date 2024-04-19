@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation"
 
 import React, { useState } from "react"
 
-const BlogCard = ({ blog }: { blog: Blog }) => {
+const BlogCard = ({ blog, idx }: { blog: Blog; idx: number }) => {
   const [imageLoading, setImageLoading] = useState(true)
   const router = useRouter()
   const lastUpdated = new Date(blog.updatedAt).toDateString()
@@ -22,7 +22,7 @@ const BlogCard = ({ blog }: { blog: Blog }) => {
           src={blog.imageCover!}
           alt={blog.title}
           fill
-          className={`${imageLoading ? "blur" : ""} rounded-lg transition-all duration-500 group-hover:scale-110`}
+          className={`${imageLoading ? "blur" : ""} ${idx === 0 && "object-center"} rounded-lg transition-all duration-500 group-hover:scale-110`}
           onLoad={() => setImageLoading(false)}
         />
       </div>
