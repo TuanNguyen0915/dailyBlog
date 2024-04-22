@@ -9,7 +9,7 @@ const Home = async () => {
   if (blogs.length === 0) {
     return (
       <div className="mt-10 w-full text-center">
-        <h1 className="text-2xl font-bold">Sorry, there are no posts</h1>
+        <h1 className="lg:text-2xl text-lg font-bold">Sorry, there are no posts</h1>
       </div>
     )
   }

@@ -53,7 +53,7 @@ const SignUpForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flexCol w-full gap-4">
-      <div className="group flex w-full items-center gap-4 rounded-full border border-muted-foreground px-4 py-2 md:py-1">
+      <div className="group flex w-full items-center gap-4 rounded-full border border-muted-foreground px-4 py-2 max-md:py-1">
         <Mail
           size={40}
           className="opacity-60 transition-all group-hover:opacity-100"

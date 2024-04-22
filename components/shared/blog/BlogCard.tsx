@@ -17,7 +17,7 @@ const BlogCard = ({ blog, idx }: { blog: Blog; idx: number }) => {
         router.push(`/blog/${blog.id}`)
       }}
     >
-      <div className="relative h-[400px] w-full overflow-hidden rounded-lg">
+      <div className="relative h-[200px] w-full overflow-hidden rounded-lg lg:h-[400px]">
         <Image
           src={blog.imageCover!}
           alt={blog.title}
@@ -29,9 +29,9 @@ const BlogCard = ({ blog, idx }: { blog: Blog; idx: number }) => {
 
       <div className="flex-1 space-y-2">
         <p className="text-sm italic text-muted-foreground">
-          Latest update: {lastUpdated}
+          <span className="max-md:hidden">Latest update:</span> {lastUpdated}
         </p>
-        <p className="text-2xl font-semibold capitalize">{blog.title}</p>
+        <p className="text-2xl max-lg:text-base font-semibold capitalize">{blog.title}</p>
       </div>
     </div>
   )

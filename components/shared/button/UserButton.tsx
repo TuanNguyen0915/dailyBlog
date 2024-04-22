@@ -9,10 +9,12 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu"
 import { userMenu } from "@/lib/constants"
 import { signOut } from "next-auth/react"
 import { usePathname, useRouter } from "next/navigation"
+import { RiAdminFill } from "react-icons/ri"
 const UserButton = () => {
   const pathName = usePathname()
   const router = useRouter()
@@ -63,8 +65,11 @@ const UserButton = () => {
           )
         })}
         {currentUser?.isAdmin && (
-          <>
+          <DropdownMenuGroup>
             <DropdownMenuSeparator />
+            <DropdownMenuLabel>
+              <h1 className="text-lg text-primary/80">Admin section</h1>
+            </DropdownMenuLabel>
             <div className="group w-full space-y-1">
               <DropdownMenuItem
                 className="text-md flexBetween w-full font-semibold group-hover:text-primary"
@@ -75,9 +80,22 @@ const UserButton = () => {
                 <WalletIcon />
                 <p>Pending List</p>
               </DropdownMenuItem>
+
               <div className="h-[1px] w-0 bg-primary transition-all duration-500 group-hover:w-full" />
             </div>
-          </>
+            <div className="group w-full space-y-1">
+              <DropdownMenuItem
+                className="text-md flexBetween w-full font-semibold group-hover:text-primary"
+                onClick={() => {
+                  router.push("/admin/dashboard")
+                }}
+              >
+                <RiAdminFill />
+                <p>Dashboard</p>
+              </DropdownMenuItem>
+              <div className="h-[1px] w-0 bg-primary transition-all duration-500 group-hover:w-full" />
+            </div>
+          </DropdownMenuGroup>
         )}
         <DropdownMenuSeparator />
         <div className="group w-full space-y-1">

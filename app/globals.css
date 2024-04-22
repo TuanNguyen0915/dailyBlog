@@ -70,6 +70,6 @@
     @apply flex flex-col;
   }
   .auth-h1 {
-    @apply bg-gradient-to-r from-primary dark:to-white to-primary bg-clip-text text-center text-6xl font-extrabold leading-[5rem] text-transparent;
+    @apply bg-gradient-to-r from-primary dark:to-white to-primary bg-clip-text text-center text-6xl max-lg:text-3xl font-extrabold leading-[5rem] text-transparent;
   }
 }
