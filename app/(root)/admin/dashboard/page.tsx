@@ -52,7 +52,7 @@ const AdminDashBoard = () => {
             </div>
           </div>
           <div className="flexCenter w-full">
-            <DashBoardTable data={allUsers}/>
+            <DashBoardTable data={allUsers} updated={fetchUsers}/>
           </div>
         </motion.div>
       )}
