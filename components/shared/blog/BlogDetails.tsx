@@ -18,6 +18,9 @@ const BlogDetails = ({ blog }: IProps) => {
   const updated = new Date(blog.updatedAt).toDateString()
   return (
     <div className="mt-10 w-full space-y-4 p-2">
+      <p className="text-end text-sm italic text-muted-foreground">
+        Last updated: {updated}
+      </p>
       <h1 className="text-4xl font-extrabold capitalize tracking-wider">
         {blog.title}
       </h1>
@@ -70,9 +73,7 @@ const BlogDetails = ({ blog }: IProps) => {
           content={currentUser ? blog.content : blog.content.slice(0, 200)}
         />
       </div>
-      <p className="text-end text-sm italic text-muted-foreground">
-        Last updated: {updated}
-      </p>
+
       {!currentUser && <UnlockContent />}
     </div>
   )
