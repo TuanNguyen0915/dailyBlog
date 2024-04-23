@@ -1,27 +1,28 @@
 "use client"
-import { useUserStore } from "@/lib/stores/user.store"
+
 import { LogOutIcon, User2, WalletIcon } from "lucide-react"
 import Image from "next/image"
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuSeparator,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuGroup,
-} from "@/components/ui/dropdown-menu"
 import { userMenu } from "@/lib/constants"
 import { signOut } from "next-auth/react"
 import { usePathname, useRouter } from "next/navigation"
 import { RiAdminFill } from "react-icons/ri"
-const UserButton = () => {
+import { SafeUser } from "@/lib/types"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+interface IProps {
+  currentUser: SafeUser
+}
+
+const UserButton = ({ currentUser }: IProps) => {
   const pathName = usePathname()
   const router = useRouter()
-  const { currentUser } = useUserStore()
+
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+    <Popover>
+      <PopoverTrigger asChild>
         <div className="flexCenter relative h-12 w-12 rounded-full border border-muted-foreground">
           {currentUser?.avatar ? (
             <Image
@@ -35,29 +36,26 @@ const UserButton = () => {
             <User2 size={40} className="cursor-pointer" />
           )}
         </div>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="min-w-64 space-y-4">
-        <DropdownMenuLabel>
-          <div className="space-y-1">
-            <p>{currentUser?.username}</p>
-            <p className="text-sm italic text-muted-foreground">
-              {currentUser?.email}
-            </p>
-          </div>
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator />
+      </PopoverTrigger>
+      <PopoverContent className="flexCol min-w-64 gap-4 space-y-4">
+        <div className="space-y-1">
+          <p>{currentUser?.username}</p>
+          <p className="text-sm italic text-muted-foreground">
+            {currentUser?.email}
+          </p>
+        </div>
         {userMenu.map((item: any) => {
           const Icon = item.icon
           const active = pathName === item.href
           return (
             <div key={item.name} className="group w-full space-y-1">
-              <DropdownMenuItem
+              <div
                 onClick={() => router.push(item.href)}
                 className={`${active ? "pl-8 text-primary" : ""} text-md flexBetween w-full font-semibold`}
               >
                 <Icon />
                 <p>{item.name}</p>
-              </DropdownMenuItem>
+              </div>
               <div
                 className={`${!active && "group-hover:w-full"} h-[1px] w-0 bg-primary transition-all duration-500`}
               />
@@ -65,13 +63,11 @@ const UserButton = () => {
           )
         })}
         {currentUser?.isAdmin && (
-          <DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuLabel>
-              <h1 className="text-lg text-primary/80">Admin section</h1>
-            </DropdownMenuLabel>
+          <>
+            <h1 className="text-lg text-primary/80">Admin section</h1>
+
             <div className="group w-full space-y-1">
-              <DropdownMenuItem
+              <div
                 className="text-md flexBetween w-full font-semibold group-hover:text-primary"
                 onClick={() => {
                   router.push("/admin/pending-list")
@@ -79,12 +75,12 @@ const UserButton = () => {
               >
                 <WalletIcon />
                 <p>Pending List</p>
-              </DropdownMenuItem>
+              </div>
 
               <div className="h-[1px] w-0 bg-primary transition-all duration-500 group-hover:w-full" />
             </div>
             <div className="group w-full space-y-1">
-              <DropdownMenuItem
+              <div
                 className="text-md flexBetween w-full font-semibold group-hover:text-primary"
                 onClick={() => {
                   router.push("/admin/dashboard")
@@ -92,24 +88,24 @@ const UserButton = () => {
               >
                 <RiAdminFill />
                 <p>Dashboard</p>
-              </DropdownMenuItem>
+              </div>
               <div className="h-[1px] w-0 bg-primary transition-all duration-500 group-hover:w-full" />
             </div>
-          </DropdownMenuGroup>
+          </>
         )}
-        <DropdownMenuSeparator />
+
         <div className="group w-full space-y-1">
-          <DropdownMenuItem
+          <div
             className="text-md flexBetween w-full font-semibold group-hover:text-primary"
             onClick={() => signOut()}
           >
             <LogOutIcon />
             <p>Sign out</p>
-          </DropdownMenuItem>
+          </div>
           <div className="h-[1px] w-0 bg-primary transition-all duration-500 group-hover:w-full" />
         </div>
-      </DropdownMenuContent>
-    </DropdownMenu>
+      </PopoverContent>
+    </Popover>
   )
 }
 

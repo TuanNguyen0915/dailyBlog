@@ -15,9 +15,7 @@ const Navbar = () => {
       <div className="flexBetween gap-4">
         <ThemeToggle />
         {currentUser ? (
-          <div className="flexCenter gap-4">
-            <UserButton />
-          </div>
+          <UserButton currentUser={currentUser} />
         ) : (
           <SignInButton />
         )}
