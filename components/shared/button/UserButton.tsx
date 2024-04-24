@@ -44,24 +44,6 @@ const UserButton = ({ currentUser }: IProps) => {
             {currentUser?.email}
           </p>
         </div>
-        {userMenu.map((item: any) => {
-          const Icon = item.icon
-          const active = pathName === item.href
-          return (
-            <div key={item.name} className="group w-full space-y-1">
-              <div
-                onClick={() => router.push(item.href)}
-                className={`${active ? "pl-8 text-primary" : ""} text-md flexBetween w-full font-semibold`}
-              >
-                <Icon />
-                <p>{item.name}</p>
-              </div>
-              <div
-                className={`${!active && "group-hover:w-full"} h-[1px] w-0 bg-primary transition-all duration-500`}
-              />
-            </div>
-          )
-        })}
         {currentUser?.isAdmin && (
           <>
             <h1 className="text-lg text-primary/80">Admin section</h1>
@@ -96,7 +78,7 @@ const UserButton = ({ currentUser }: IProps) => {
 
         <div className="group w-full space-y-1">
           <div
-            className="text-md flexBetween w-full font-semibold group-hover:text-primary"
+            className="text-md flexBetween w-full font-semibold group-hover:text-primary cursor-pointer"
             onClick={() => signOut()}
           >
             <LogOutIcon />
