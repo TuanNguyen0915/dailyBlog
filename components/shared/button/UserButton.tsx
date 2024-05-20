@@ -1,11 +1,10 @@
 "use client"
 
-import { LogOutIcon, User2, WalletIcon } from "lucide-react"
+import { LayoutDashboard, LogOutIcon, User2, WalletIcon } from "lucide-react"
 import Image from "next/image"
-import { userMenu } from "@/lib/constants"
 import { signOut } from "next-auth/react"
-import { usePathname, useRouter } from "next/navigation"
-import { RiAdminFill } from "react-icons/ri"
+import { useRouter } from "next/navigation"
+import { RiAdminFill, RiDashboard2Fill } from "react-icons/ri"
 import { SafeUser } from "@/lib/types"
 import {
   Popover,
@@ -17,7 +16,6 @@ interface IProps {
 }
 
 const UserButton = ({ currentUser }: IProps) => {
-  const pathName = usePathname()
   const router = useRouter()
 
   return (
@@ -44,6 +42,20 @@ const UserButton = ({ currentUser }: IProps) => {
             {currentUser?.email}
           </p>
         </div>
+
+        <div className="group w-full space-y-1">
+          <div
+            className="text-md flexBetween w-full font-semibold group-hover:text-primary"
+            onClick={() => {
+              router.push("/dashboard")
+            }}
+          >
+            <LayoutDashboard />
+            <p>Dashboard</p>
+          </div>
+          <div className="h-[1px] w-0 bg-primary transition-all duration-500 group-hover:w-full" />
+        </div>
+
         {currentUser?.isAdmin && (
           <>
             <h1 className="text-lg text-primary/80">Admin section</h1>
@@ -78,7 +90,7 @@ const UserButton = ({ currentUser }: IProps) => {
 
         <div className="group w-full space-y-1">
           <div
-            className="text-md flexBetween w-full font-semibold group-hover:text-primary cursor-pointer"
+            className="text-md flexBetween w-full cursor-pointer font-semibold group-hover:text-primary"
             onClick={() => signOut()}
           >
             <LogOutIcon />
